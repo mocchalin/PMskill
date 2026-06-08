@@ -1,0 +1,7 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-06-08T00:00	4b07f2d	doc-update-from-feedback	-	60.0	baseline	检查点/失败模式/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-reviewer	-	76.7	baseline	检查点/反例/失败模式	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-test-validator	-	88.9	baseline	检查点/失败模式/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-to-ui-prompt	-	68.9	baseline	失败模式/检查点/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-writer	-	79.5	baseline	失败模式/检查点/Frontmatter	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	ui-alignment-checker	-	84.3	baseline	资源整合/架构/检查点	初始评估	dry_run
