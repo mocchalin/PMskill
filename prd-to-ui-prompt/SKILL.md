@@ -1,6 +1,6 @@
 ---
 name: prd-to-ui-prompt
-description: 从需求文档（PRD/用户故事/功能说明）中提炼生成 UI 界面的 prompt。支持两种目标：UI 设计工具（Figma、Motiff、MasterGo 等）和 Vibe Coding 工具（Qoder、Cursor、Bolt、v0 等）。输入可以是 Markdown、Word、PDF 或直接粘贴的文本。当用户提到"根据需求生成 UI prompt"、"把 PRD 转成界面描述"、"需求文档生成设计稿提示词"、"从需求出 UI"、"帮我写个前端 prompt"、"根据这个文档生成页面"、"PRD 转 UI"、"需求转界面"等意图时触发。即使用户只说"帮我根据这个文档生成 prompt"并附带需求类文件，也应使用此 skill。
+description: 从需求文档（PRD/用户故事/功能说明）生成 UI 界面 prompt。支持两种目标：UI 设计工具（Figma、Motiff 等）和 Vibe Coding 工具（Qoder、Cursor、Bolt 等）。当用户需要把 PRD 转成 UI 设计稿、界面描述或前端 prompt 时触发。
 ---
 
 # PRD to UI Prompt
@@ -8,6 +8,8 @@ description: 从需求文档（PRD/用户故事/功能说明）中提炼生成 U
 将需求文档转化为高质量的 UI 界面生成提示词。
 
 这个 skill 解决的核心问题是：需求文档里写的是"做什么"和"为什么"，但 UI 生成工具需要的是"长什么样"和"怎么交互"。这个 skill 就是那个翻译层——把产品语言转化成设计语言。
+
+> **文档结构**：本 skill 由三部分组成——①工作流（Step 1-6，含 3 个检查点）②写作原则（写好 prompt 的核心准则）③反例黑名单（常见错误速查）。执行时严格按步骤顺序推进，遇到 🔴 CHECKPOINT 必须暂停等待用户确认。
 
 ## 工作流
 
@@ -296,20 +298,9 @@ description: 从需求文档（PRD/用户故事/功能说明）中提炼生成 U
 
 ## UI 设计工具 vs Vibe Coding 工具的差异
 
-两类工具吃到的好 prompt 有不同的侧重。用户选择目标后，加载对应模板来指导 prompt 风格。
-
-**UI 设计工具的 prompt 偏重：**
-- 视觉层面的精确描述：间距、字号、配色值
-- 组件外观的细节：圆角、阴影、边框
-- 布局的网格和比例
-- 不需要实现细节（不提技术栈、不写伪代码）
-
-**Vibe Coding 工具的 prompt 偏重：**
-- 技术栈声明（React + Tailwind、Vue + Element Plus 等）
-- 组件结构和 props 关系
-- 状态管理和数据流
-- 交互逻辑的伪代码或描述
-- 视觉部分用简洁描述即可，不需要像素级精确
+> 两类工具的 prompt 侧重已在 Step 2 选项中描述。选择后加载对应模板即可，无需重复说明差异。
+>
+> 如需快速判断：UI 设计工具关注**视觉外观**（间距、色值、组件样式），Vibe Coding 工具关注**实现方式**（技术栈、组件结构、状态管理）。
 
 ---
 
