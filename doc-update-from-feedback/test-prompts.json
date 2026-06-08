@@ -1,0 +1,5 @@
+[
+  {"id":1,"prompt":"Here is our PRD and the test feedback Excel file. Please update the document based on the feedback.","expected":"Reads both files, parses Excel feedback, matches to PRD sections, applies purple text additions and strikethrough deletions, updates revision history"},
+  {"id":2,"prompt":"根据研发反馈更新这份需求文档，附件是Bug清单.xlsx","expected":"解析Excel中的Bug清单表格结构，智能匹配到文档对应章节，用紫色标记修改内容，插入变更摘要和修订历史"},
+  {"id":3,"prompt":"Update this markdown spec with the review comments from the team.","expected":"Identifies modification locations, applies span-style purple text for additions and strikethrough for deletions, adds change summary below TOC"}
+]

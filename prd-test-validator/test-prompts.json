@@ -1,0 +1,5 @@
+[
+  {"id":1,"prompt":"用户上传PRD文档并要求：评审需求、生成测试用例。","expected":"执行A0阶段（QA视角找缺失/矛盾/模糊/不可测/奇脉/依赖问题，生成Excel让用户确认），用户确认后执行A阶段（生成完整测试用例Excel含兼容性矩阵）。"},
+  {"id":2,"prompt":"用户上传代码仓库并说：检查这段vibecoding代码能不能过测试。","expected":"执行B阶段（四维度代码审查：需求覆盖/代码质量/安全/性能并发），输出code_review_report.md + issues_checklist.xlsx。"},
+  {"id":3,"prompt":"用户上传PRD和代码，要求全流程：评审PRD→生成用例→检查代码→生成修复指令。","expected":"串联A0→A→B→C四个阶段，产出PRD评审Excel、测试用例Excel、代码审查报告、问题清单Excel、三种格式的AI修复指令（Cursor/Claude Code/通用）。"}
+]

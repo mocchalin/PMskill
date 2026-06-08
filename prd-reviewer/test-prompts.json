@@ -1,0 +1,5 @@
+[
+  {"id":1,"prompt":"帮我看看这个需求文档有什么问题。"（用户上传PRD.docx）","expected":"读取docx，执行四维度+五角色视角审核，生成带红字批注和索引页的批注审核文档，交付后询问是否应用修改。"},
+  {"id":2,"prompt":"Review this PRD for our payment gateway integration."（用户粘贴PRD文本）","expected":"Analyzes pasted text, identifies issues across completeness/consistency/clarity/testability/role perspectives, generates annotated .docx with red comments and bookmark hyperlinks."},
+  {"id":3,"prompt":"Audit this requirements spec for missing edge cases and security concerns."（用户上传spec.md）","expected":"Converts md to docx, scans for missing edge cases, security gaps, unclear acceptance criteria, and outputs annotated document with severity ratings."}
+]

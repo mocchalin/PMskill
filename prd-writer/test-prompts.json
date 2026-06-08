@@ -1,0 +1,5 @@
+[
+  {"id":1,"prompt":"帮我写一个B端业务系统的PRD","expected":"识别为模式A（企业级B端系统），读取references/enterprise-prd-template.md，按模板结构收集信息后生成完整的Markdown PRD文件，包含模块规划、角色权限、接口规范等"},
+  {"id":2,"prompt":"我们敏捷团队需要一个用户故事驱动的PRD模板","expected":"识别为模式B（用户故事驱动型），读取references/agile-prd-template.md，生成以用户故事和验收标准为核心的PRD"},
+  {"id":3,"prompt":"基于之前上传的PRD，帮我写二期需求","expected":"识别为模式C（迭代延续），读取references/incremental-prd-template.md，解析原有PRD的编号体系和术语，保持延续性地生成下一期PRD"}
+]

@@ -1,0 +1,127 @@
+{
+  "project": "示例项目：用户登录模块",
+  "prd_source": "login_prd_v1.2.docx",
+  "test_cases": [
+    {
+      "id": "TC-LOGIN-001",
+      "module": "登录",
+      "title": "使用正确账号密码成功登录",
+      "priority": "P0",
+      "case_type": "正向",
+      "design_method": "场景法",
+      "precondition": "1. 已注册账号 user1/Pass123!\n2. 浏览器已清除 cookie",
+      "steps": "1. 打开登录页\n2. 输入账号 user1\n3. 输入密码 Pass123!\n4. 点击登录按钮",
+      "test_data": "账号: user1\n密码: Pass123!",
+      "expected": "1. 跳转到首页 /home\n2. 右上角显示 'user1'\n3. cookie 中写入 session_id",
+      "test_type": "功能",
+      "related_ac": "AC-1.1"
+    },
+    {
+      "id": "TC-LOGIN-002",
+      "module": "登录",
+      "title": "密码错误时返回明确错误提示",
+      "priority": "P0",
+      "case_type": "负向",
+      "design_method": "等价类+错误推测",
+      "precondition": "已注册账号 user1",
+      "steps": "1. 打开登录页\n2. 输入账号 user1\n3. 输入密码 WrongPass\n4. 点击登录按钮",
+      "test_data": "账号: user1\n密码: WrongPass",
+      "expected": "1. 停留在登录页\n2. 显示提示 '账号或密码错误'\n3. 未写入 session_id\n4. 出于安全，不能透露是账号错还是密码错",
+      "test_type": "安全",
+      "related_ac": "AC-1.2"
+    },
+    {
+      "id": "TC-LOGIN-003",
+      "module": "登录",
+      "title": "密码字段为空时禁止提交",
+      "priority": "P1",
+      "case_type": "负向",
+      "design_method": "边界值",
+      "precondition": "浏览器已清除 cookie",
+      "steps": "1. 打开登录页\n2. 输入账号 user1\n3. 密码字段留空\n4. 点击登录按钮",
+      "test_data": "账号: user1\n密码: (空)",
+      "expected": "1. 登录按钮被禁用 或 点击后显示 '请输入密码'\n2. 不发起登录请求",
+      "test_type": "功能",
+      "related_ac": "AC-1.3"
+    },
+    {
+      "id": "TC-LOGIN-004",
+      "module": "登录",
+      "title": "连续 5 次密码错误后账号锁定 30 分钟",
+      "priority": "P0",
+      "case_type": "异常",
+      "design_method": "边界值+错误推测",
+      "precondition": "账号 user1 未被锁定",
+      "steps": "1. 用错误密码连续登录 4 次\n2. 第 5 次仍用错误密码登录\n3. 第 6 次用正确密码登录\n4. 30 分钟后再用正确密码登录",
+      "test_data": "账号: user1\n错误密码: Wrong1, Wrong2, Wrong3, Wrong4, Wrong5\n正确密码: Pass123!",
+      "expected": "1. 前 4 次提示 '账号或密码错误'\n2. 第 5 次提示 '账号已锁定，请 30 分钟后重试'\n3. 第 6 次即使密码正确也拒绝，提示锁定剩余时间\n4. 30 分钟后正常登录",
+      "test_type": "安全",
+      "related_ac": "AC-1.4"
+    },
+    {
+      "id": "TC-LOGIN-005",
+      "module": "登录",
+      "title": "网络中断时登录请求的错误处理",
+      "priority": "P1",
+      "case_type": "异常",
+      "design_method": "错误推测",
+      "precondition": "账号 user1 未锁定",
+      "steps": "1. 打开登录页\n2. 断开网络\n3. 输入账号密码并点击登录\n4. 恢复网络后重试",
+      "test_data": "账号: user1\n密码: Pass123!",
+      "expected": "1. 显示 '网络连接失败，请检查网络后重试'\n2. 登录按钮恢复可点击状态\n3. 不出现页面卡死或白屏\n4. 恢复网络后重试成功",
+      "test_type": "功能",
+      "related_ac": "AC-1.5"
+    },
+    {
+      "id": "TC-LOGIN-006",
+      "module": "登录",
+      "title": "账号字段输入 SQL 注入字符",
+      "priority": "P0",
+      "case_type": "异常",
+      "design_method": "错误推测",
+      "precondition": "无",
+      "steps": "1. 账号输入 admin' OR '1'='1\n2. 密码输入任意\n3. 点击登录",
+      "test_data": "账号: admin' OR '1'='1\n密码: anything",
+      "expected": "1. 登录失败\n2. 提示 '账号或密码错误'\n3. 后端日志无 SQL 异常\n4. 数据库无异常查询",
+      "test_type": "安全",
+      "related_ac": "AC-1.2"
+    },
+    {
+      "id": "TC-LOGIN-007",
+      "module": "登录",
+      "title": "同一账号在两台设备并发登录",
+      "priority": "P1",
+      "case_type": "异常",
+      "design_method": "场景法+错误推测",
+      "precondition": "账号 user1 已在设备 A 登录",
+      "steps": "1. 在设备 B 上用同一账号登录\n2. 在设备 A 刷新页面",
+      "test_data": "账号: user1\n密码: Pass123!",
+      "expected": "按 PRD 策略执行：\n- 策略1（互踢）：设备 A 被挤下线，提示 '账号在其他设备登录'\n- 策略2（共存）：两个设备均可正常使用\n具体按 AC-1.6 规定",
+      "test_type": "功能",
+      "related_ac": "AC-1.6"
+    }
+  ],
+  "compatibility_matrix": {
+    "browsers": [
+      "Chrome 最新版",
+      "Firefox 最新版",
+      "Safari 最新版",
+      "Edge 最新版"
+    ],
+    "os": [
+      "Windows 11",
+      "Windows 10",
+      "macOS 14 (Sonoma)",
+      "macOS 13 (Ventura)",
+      "Ubuntu 22.04"
+    ],
+    "devices": [
+      "iPhone 15 Pro (iOS 17)",
+      "iPhone 13 (iOS 16)",
+      "Samsung Galaxy S24 (Android 14)",
+      "小米 14 (Android 14)"
+    ],
+    "resolutions": ["1920x1080", "1366x768", "2560x1440"],
+    "notes": "PRD 要求支持主流浏览器最新三个大版本；移动端覆盖 iOS 和 Android 最近两年主流机型"
+  }
+}
