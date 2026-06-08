@@ -331,44 +331,13 @@ issues.json 格式要求（脚本会读取外层字段）：
 [OK] 建议：XXX
 ```
 
-该批注段落的所有文字使用红色（RGB: 255, 0, 0）、斜体、字号比正文小1号，并前后加分隔线以便识别。
+该批注段落的所有文字使用红色、斜体、字号比正文小1号，并前后加分隔线以便识别。（精确颜色值以脚本 `annotate_prd.py` 中的常量定义为准。）
 
 3. 在该批注段落处设置 Word 书签（`<w:bookmarkStart>`/`<w:bookmarkEnd>`），书签名为问题编号（如 `issue_C_001`）
 
-#### 3.5 书签与超链接的 XML 实现
+#### 3.5 书签与超链接的实现
 
-```python
-from docx.oxml.ns import qn
-from docx.oxml import OxmlElement
-
-def add_bookmark(paragraph, bookmark_id, bookmark_name):
-    """在段落开头插入书签"""
-    tag = paragraph.runs[0]._r if paragraph.runs else paragraph._p
-    bm_start = OxmlElement('w:bookmarkStart')
-    bm_start.set(qn('w:id'), str(bookmark_id))
-    bm_start.set(qn('w:name'), bookmark_name)
-    bm_end = OxmlElement('w:bookmarkEnd')
-    bm_end.set(qn('w:id'), str(bookmark_id))
-    paragraph._p.insert(0, bm_start)
-    paragraph._p.append(bm_end)
-
-def add_internal_hyperlink(paragraph, anchor_name, link_text):
-    """在段落中添加跳转到书签的超链接"""
-    hyperlink = OxmlElement('w:hyperlink')
-    hyperlink.set(qn('w:anchor'), anchor_name)
-    r = OxmlElement('w:r')
-    rPr = OxmlElement('w:rPr')
-    rStyle = OxmlElement('w:rStyle')
-    rStyle.set(qn('w:val'), 'Hyperlink')
-    rPr.append(rStyle)
-    r.append(rPr)
-    t = OxmlElement('w:t')
-    t.text = link_text
-    r.append(t)
-    hyperlink.append(r)
-    paragraph._p.append(hyperlink)
-    return hyperlink
-```
+书签和内部超链接通过 python-docx 的 XML 操作实现。脚本 `annotate_prd.py` 中的 `add_bookmark()` 和 `add_internal_hyperlink()` 函数封装了完整逻辑，包含 `w:bookmarkStart`/`w:bookmarkEnd` 插入和 `w:hyperlink w:anchor` 跳转链接创建。手动编写时请参考脚本源码。
 
 #### 3.6 分页符处理
 
@@ -376,32 +345,13 @@ def add_internal_hyperlink(paragraph, anchor_name, link_text):
 
 #### 3.7 排版规范参考
 
-> 脚本 `annotate_prd.py` 已内置以下排版规则，仅在手动编写时参考。
+> 精确颜色值和排版参数以脚本 `annotate_prd.py` 中的常量定义为准。以下为设计意图描述。
 
-批注段落的视觉设计：字体颜色纯红色 RGB(255, 0, 0)，与正文相同字体、字号缩小 1-2pt，斜体，左侧红色竖线或淡红背景（FFF0F0），批注前缀格式 `|| [C-001 | [高]] ` 加粗显示。严重程度标识：[高] 红色字体+淡红背景，[中] 橙红色 RGBColor(255, 140, 0)+淡黄背景，[低] 暗红色 RGB(180, 0, 0)。
+批注段落视觉设计：红色字体、与正文相同字体字号缩小 1-2pt、斜体、左侧红色竖线或淡红背景、批注前缀加粗显示。严重程度区分：[高] 红色+淡红背景，[中] 橙红色+淡黄背景，[低] 暗红色。
 
 #### 3.8 手动编写参考
 
-> 优先使用 `scripts/annotate_prd.py`，仅在脚本不可用时手动编写。在当前工作目录基于原始文件的副本进行操作。
-
-关键技巧——在指定位置**之后**插入段落：
-```python
-def insert_paragraph_after(paragraph, text, style=None):
-    """在指定段落之后插入新段落"""
-    new_para = OxmlElement('w:p')
-    paragraph._p.addnext(new_para)
-    from docx.text.paragraph import Paragraph
-    p = Paragraph(new_para, paragraph._p.getparent())
-    return p
-```
-
-在文档**开头**插入内容（在所有现有段落之前）：
-```python
-body = doc.element.body
-first_child = body[0]
-new_para = OxmlElement('w:p')
-body.insert(0, new_para)
-```
+> 优先使用 `scripts/annotate_prd.py`，仅在脚本不可用时手动编写。脚本中的 `insert_paragraph_after()` 和文档开头插入逻辑可作为手动实现的参考。
 
 **步骤三失败模式处理**：
 
