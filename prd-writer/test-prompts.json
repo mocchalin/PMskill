@@ -1,5 +1,10 @@
 [
   {"id":1,"prompt":"帮我写一个B端业务系统的PRD","expected":"识别为模式A（企业级B端系统），读取references/enterprise-prd-template.md，按模板结构收集信息后生成完整的Markdown PRD文件，包含模块规划、角色权限、接口规范等"},
   {"id":2,"prompt":"我们敏捷团队需要一个用户故事驱动的PRD模板","expected":"识别为模式B（用户故事驱动型），读取references/agile-prd-template.md，生成以用户故事和验收标准为核心的PRD"},
-  {"id":3,"prompt":"基于之前上传的PRD，帮我写二期需求","expected":"识别为模式C（迭代延续），读取references/incremental-prd-template.md，解析原有PRD的编号体系和术语，保持延续性地生成下一期PRD"}
+  {"id":3,"prompt":"基于之前上传的PRD，帮我写二期需求","expected":"识别为模式C（迭代延续），读取references/incremental-prd-template.md，解析原有PRD的编号体系和术语，保持延续性地生成下一期PRD"},
+  {"id":4,"prompt":"帮我写个需求","expected":"路由不明确，触发🔴 CHECKPOINT询问用户选择模式（A/B/C），根据用户选择加载对应模板"},
+  {"id":5,"prompt":"帮我写一个CRM系统的PRD，输出Word文档","expected":"识别为模式A，用户已指定docx输出，经🔴 CHECKPOINT确认后读取enterprise模板，生成后调用docx技能输出.docx"},
+  {"id":6,"prompt":"我们的订单管理模块要加一个批量导出功能","expected":"识别为模式B（现有功能增强），读取agile-prd-template.md，生成以用户故事+验收标准为主的精简PRD"},
+  {"id":7,"prompt":"（同一对话中第二次）帮我把刚才的PRD改一下，加上数据埋点章节","expected":"检测已有PRD上下文，触发版本管理流程，询问用户选择覆盖/新建/局部修改策略"},
+  {"id":8,"prompt":"做一个电商系统的PRD，面向C端用户","expected":"识别为模式A或B（取决于规模信号），触发🔴 CHECKPOINT确认模式，收集信息后生成PRD"}
 ]
