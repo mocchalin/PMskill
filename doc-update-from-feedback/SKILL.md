@@ -61,7 +61,7 @@ for sheet_name, df in all_sheets.items():
     print(f"Sheet: {sheet_name}, 列: {list(df.columns)}, 行数: {len(df)}")
 ```
 
-**注意**：使用 `xlsx` skill 的读取能力，先阅读 `/mnt/skills/public/xlsx/SKILL.md` 了解完整的 Excel 读取指南。
+**注意**：使用 `xlsx` skill 的读取能力处理 Excel 文件。本 skill 目录下附带 `scripts/parse_excel_feedback.py` 脚本，可自动识别表格结构并提取标准化反馈条目。
 
 #### 2. 智能识别表格结构
 
@@ -549,10 +549,11 @@ Change Log、Changelog、Version History、Revision Record
 ```
 
 完整的 docx 编辑流程：
-1. 先阅读 `/mnt/skills/public/docx/SKILL.md` 获取 docx 编辑的详细指南
-2. 使用 `python scripts/office/unpack.py` 解包文档
-3. 在 XML 中找到目标位置并进行编辑
-4. 使用 `python scripts/office/pack.py` 重新打包
+1. 使用 `docx` skill 的读取与编辑能力处理 Word 文档
+2. 解包文档（docx 本质是 ZIP，可用 `unzip docx文件 -d 解包目录` 解包）
+3. 在 `word/document.xml` 中找到目标位置并进行编辑
+4. 重新打包（`cd 解包目录 && zip -r ../新文档.docx *`）
+5. 本 skill 目录下附带 `scripts/mark_changes.py` 脚本，可直接在解包后的 XML 中批量插入紫色/删除线标记
 
 ### 对于 Markdown 文件
 
@@ -567,6 +568,8 @@ Change Log、Changelog、Version History、Revision Record
 6. 插入变更摘要 → 目录下方
 7. 写回文件
 ```
+
+本 skill 目录下附带 `scripts/mark_changes_md.py` 脚本，可自动完成步骤 2-6：解析 Markdown 结构、在正确位置插入紫色/删除线标记、生成变更摘要并插入目录下方。
 
 #### 第1步：读取与结构解析
 
@@ -1232,6 +1235,27 @@ Markdown 表格同样只在单元格内部做标记，不增删列：
 
 ---
 
+## 反例与黑名单
+
+以下操作是**明确禁止**的危险动作，执行任何一项都会破坏文档完整性或导致用户数据丢失。
+
+| # | 禁止操作 | 后果 | 正确做法 |
+|---|---------|------|---------|
+| 1 | 🔴 **未经 🔴 CHECKPOINT 确认直接修改文档** | 误改、漏改、过度修改，用户无法追溯 | 第三步半必须展示修改计划，等用户明确确认后再执行 |
+| 2 | **破坏表格结构**（增删列、改宽度、删行、改合并单元格） | 表格渲染错乱，数据错位 | 只在单元格内部做标记，新增行只能追加在末尾，删除行用删除线保留结构 |
+| 3 | **在代码块内部插入 `<span>` 或 HTML 标记** | Markdown/HTML 代码块语法被破坏，无法渲染 | 在代码块外部用注释标注变更，代码内容直接替换不加标记 |
+| 4 | **重复使用相同的书签 ID** | Word 文档内部链接失效，点击跳转异常 | 书签 ID 全局唯一递增，与已有书签/批注 ID 不冲突 |
+| 5 | **修改与反馈无关的内容** | 引入未经验证的变更，文档版本混乱 | 严格遵循最小改动原则，只修改反馈涉及的位置 |
+| 6 | **把变更摘要、修订历史用紫色文字标记** | 元信息被误当作需求正文，颜色语义混乱 | 变更摘要和修订历史使用黑色普通文字 |
+| 7 | **在 frontmatter（`---` 之间）插入 HTML 标记** | YAML 解析失败，frontmatter 损坏 | 仅更新 YAML 字段值，不加任何 HTML/XML 标记 |
+| 8 | **直接删除表格的 `<w:tr>` 或 Markdown 行** | 表格行数/列数变化，后续内容错位 | 保留完整行结构，对单元格内容加删除线 |
+| 9 | **未验证输入缺失就直接开始解析** | 缺少需求文档或反馈信息，流程空转或报错 | 第一步即检查两类输入是否齐全，缺失时明确停止并提示用户 |
+| 10 | **跨越 `<w:r>` run 边界做文本替换** | XML 结构被破坏，Word 打开报错 | 在单个 run 内部操作，或拆分/重建 run 时保持 XML 闭合 |
+
+**特别警告**：本 skill 涉及直接编辑用户文档的底层结构（Word XML、Markdown 源码、HTML DOM），任何结构性破坏都可能导致文档无法打开或内容丢失。**当对某处修改没有十足把握时，宁可跳过该处并向用户说明，也不要冒险执行。**
+
+---
+
 ## 使用注意事项
 
 1. **日期标记原则（新增）**：对于 Markdown 和 docx 格式的文档，所有新增/修改内容**必须**在前面添加【XX.XX(月日）更新】标记，使用紫色文字
@@ -1249,9 +1273,9 @@ Markdown 表格同样只在单元格内部做标记，不增删列：
 ## 与其他 Skill 的协作
 
 - 读取 .docx 文件时，先使用 `docx` skill 的读取能力
-- 读取 .pdf 文件时，先使用 `pdf-reading` skill 的提取能力
-- **读取 .xlsx/.xls/.csv 反馈文件时，先使用 `xlsx` skill 的读取能力**（阅读 `/mnt/skills/public/xlsx/SKILL.md`）
+- 读取 .pdf 文件时，使用 `pdf` skill 的提取能力
+- **读取 .xlsx/.xls/.csv 反馈文件时，使用 `xlsx` skill 的读取能力**
 - 编辑 .docx 文件时，遵循 `docx` skill 的 XML 编辑规范
 - 创建新的 .docx 输出时，遵循 `docx` skill 的创建规范
 - 读取 Notion 内容时，使用 Notion MCP 工具
-- 读取上传文件时，使用 `file-reading` skill 的路由指南
+- 读取上传文件时，使用文件读取工具处理
