@@ -1,0 +1,19 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-06-08T00:00	4b07f2d	doc-update-from-feedback	-	60.0	baseline	检查点/失败模式/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-reviewer	-	76.7	baseline	检查点/反例/失败模式	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-test-validator	-	88.9	baseline	检查点/失败模式/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-to-ui-prompt	-	68.9	baseline	失败模式/检查点/反例	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	prd-writer	-	79.5	baseline	失败模式/检查点/Frontmatter	初始评估	dry_run
+2026-06-08T00:00	4b07f2d	ui-alignment-checker	-	84.3	baseline	资源整合/架构/检查点	初始评估	dry_run
+2026-06-08T00:05	bcd8d20	doc-update-from-feedback	79.1	79.1	keep	dim4/dim6/dim9	三轮优化保留	dry_run
+2026-06-08T00:05	bcd8d20	prd-to-ui-prompt	68.9	78.5	keep	dim4/dim3/dim9	一轮优化	dry_run
+2026-06-08T00:10	ef340a9	prd-to-ui-prompt	78.5	78.5	keep	dim7	结构修复	dry_run
+2026-06-08T00:15	08cf1ee	prd-to-ui-prompt	78.5	88.0	keep	dim4/dim7	三轮优化:补充Step4.5检查点+修复结构	full_test
+2026-06-08T00:20	783e73f	prd-reviewer	76.7	77.8	keep	dim4/dim3/dim9	一轮优化:添加CHECKPOINT+失败模式+反例	dry_run
+2026-06-08T00:25	8892e14	prd-reviewer	77.8	83.0	keep	dim2/dim4/dim5/dim6/dim7	二轮优化:合并Steps3/4/5+修复CLI+添加Step2.5CHECKPOINT+严重度分级	dry_run
+2026-06-08T00:30	ff59db2	prd-reviewer	83.0	83.0	keep	dim5/dim7	三轮:精简冗余代码	best	dry_run
+2026-06-08T00:35	ad2baaf	prd-writer	79.5	79.5	keep	dim3/dim4/dim9	一轮:添加CHECKPOINT+失败模式+反例	dry_run
+2026-06-08T00:40	d4b8496	prd-writer	79.5	79.5	keep	dim4/dim1	二轮:Step5CHECKPOINT+触发词+扩展测试	dry_run
+2026-06-08T00:45	9b3485f	ui-alignment-checker	84.3	84.3	keep	dim3/dim4/dim9	一轮:添加CHECKPOINT+失败模式+反例	best	dry_run
+2026-06-09T00:05	c742d8f	prd-test-validator	88.9	88.9	keep	dim3/dim4/dim9	一轮:4个CHECKPOINT+16条失败模式+10条反例+8条测试	dry_run
+2026-06-09T00:10	4b0df5a	prd-test-validator	88.9	88.9	keep	dim6/dim4/dim7	二轮:修复硬编码路径+C阶段CHECKPOINT+懒加载refs	best	dry_run
