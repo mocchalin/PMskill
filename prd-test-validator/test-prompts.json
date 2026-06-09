@@ -1,5 +1,10 @@
 [
   {"id":1,"prompt":"用户上传PRD文档并要求：评审需求、生成测试用例。","expected":"执行A0阶段（QA视角找缺失/矛盾/模糊/不可测/奇脉/依赖问题，生成Excel让用户确认），用户确认后执行A阶段（生成完整测试用例Excel含兼容性矩阵）。"},
   {"id":2,"prompt":"用户上传代码仓库并说：检查这段vibecoding代码能不能过测试。","expected":"执行B阶段（四维度代码审查：需求覆盖/代码质量/安全/性能并发），输出code_review_report.md + issues_checklist.xlsx。"},
-  {"id":3,"prompt":"用户上传PRD和代码，要求全流程：评审PRD→生成用例→检查代码→生成修复指令。","expected":"串联A0→A→B→C四个阶段，产出PRD评审Excel、测试用例Excel、代码审查报告、问题清单Excel、三种格式的AI修复指令（Cursor/Claude Code/通用）。"}
+  {"id":3,"prompt":"用户上传PRD和代码，要求全流程：评审PRD→生成用例→检查代码→生成修复指令。","expected":"串联A0→A→B→C四个阶段，产出PRD评审Excel、测试用例Excel、代码审查报告、问题清单Excel、三种格式的AI修复指令（Cursor/Claude Code/通用）。"},
+  {"id":4,"prompt":"用户上传PRD文档，说：帮我看看这个需求有没有坑。","expected":"仅执行A0阶段（PRD质量评审），产出prd_review.xlsx + prd_supplement_suggestions.md，不进入阶段A。"},
+  {"id":5,"prompt":"用户上传PRD并说：PRD已经很完善了，直接生成用例就行，不用评审。","expected":"跳过A0阶段，仅执行A阶段（从PRD直接生成测试用例Excel），在文档中标注'未经A0评审'。"},
+  {"id":6,"prompt":"用户上传代码审查的问题清单Excel（已勾选要修的问题），说：帮我生成AI修复指令。","expected":"仅执行C阶段，从issues_checklist.xlsx中读取勾选项，生成三种格式的修复指令（Cursor/Claude Code/通用）。"},
+  {"id":7,"prompt":"用户上传一个很小的PRD（只有3句话的功能描述），说：生成测试用例。","expected":"先做A0评审（发现PRD过于简略，标注大量缺失/模糊问题），建议用户补充PRD后再生成用例，或基于合理推断生成有限的冒烟用例。"},
+  {"id":8,"prompt":"用户上传代码仓库并说：审查一下代码，如果有问题就直接帮我生成修复指令。","expected":"串联B→C两个阶段：先执行B阶段代码审查，交付审查报告+问题清单Excel后用CHECKPOINT确认，用户勾选后执行C阶段生成修复指令。"}
 ]
