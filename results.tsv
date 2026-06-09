@@ -16,4 +16,4 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-08T00:40	d4b8496	prd-writer	79.5	79.5	keep	dim4/dim1	二轮:Step5CHECKPOINT+触发词+扩展测试	dry_run
 2026-06-08T00:45	9b3485f	ui-alignment-checker	84.3	84.3	keep	dim3/dim4/dim9	一轮:添加CHECKPOINT+失败模式+反例	best	dry_run
 2026-06-09T00:05	c742d8f	prd-test-validator	88.9	88.9	keep	dim3/dim4/dim9	一轮:4个CHECKPOINT+16条失败模式+10条反例+8条测试	dry_run
-2026-06-09T00:10	4b0df5a	prd-test-validator	88.9	88.9	keep	dim6/dim4/dim7	二轮:修复硬编码路径+C阶段CHECKPOINT+懒加载refs	best	dry_run
+2026-06-09T00:10	4b0df5a	prd-test-validator	88.9	93.5	keep	dim6/dim4/dim7	二轮:修复硬编码路径+C阶段CHECKPOINT+懒加载refs	eval_70.6	dry_run
