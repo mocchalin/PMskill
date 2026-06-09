@@ -64,6 +64,7 @@ license: Proprietary
 │
 └─ 阶段 C：修复指令生成
     ├─ C.1 获取勾选后的 Excel
+    ├─ 🔴 CHECKPOINT — 确认修复范围
     ├─ C.2 生成三种格式修复指令
     └─ C.4 交付
 ```
@@ -165,7 +166,7 @@ JSON schema（详见脚本开头）：
 
 ### A0.4 🔴 CHECKPOINT — 把 PRD 评审 Excel 交给用户确认
 
-把 Excel 放到 `/mnt/user-data/outputs/`，`present_files` 展示。然后用 AskUserQuestion 工具确认：
+把 Excel 放到 outputs 目录，`present_files` 展示。然后用 AskUserQuestion 工具确认：
 
 ```
 问题：PRD 评审发现 {N} 个问题（🔴 {blocker} 阻塞 / 🟡 {major} 重要 / 🟢 {minor} 建议）。请确认下一步：
@@ -253,10 +254,10 @@ python scripts/read_prd_review_decisions.py reviewed.xlsx
 ### A.1 读取并理解 PRD
 
 先搞清楚 PRD 长什么样。根据文件类型：
-- `.docx` → 读 `/mnt/skills/public/docx/SKILL.md` 再操作
-- `.pdf` → 读 `/mnt/skills/public/pdf-reading/SKILL.md` 再操作
+- `.docx` → 读 docx skill 的操作说明再操作
+- `.pdf` → 读 pdf skill 的操作说明再操作
 - `.md` / `.txt` → 直接 `view`
-- `.xlsx` 形式的需求 → 读 `/mnt/skills/public/xlsx/SKILL.md`
+- `.xlsx` 形式的需求 → 读 xlsx skill 的操作说明
 
 **从 PRD 中抽取：**
 - 功能模块（用于"所属模块"字段）
@@ -519,7 +520,7 @@ python scripts/generate_issues_checklist.py issues.json issues_checklist.xlsx
 
 ### B.5 🔴 CHECKPOINT — 报告交付
 
-将 `code_review_report.md` + `issues_checklist.xlsx` 一起放到 `/mnt/user-data/outputs/`，调用 `present_files` 展示。然后用 AskUserQuestion 确认下一步：
+将 `code_review_report.md` + `issues_checklist.xlsx` 一起放到 outputs 目录，调用 `present_files` 展示。然后用 AskUserQuestion 确认下一步：
 
 ```
 问题：代码审查完成，发现 {critical} 处严重 / {major} 处一般 / {minor} 处建议优化。请确认下一步：
@@ -543,6 +544,23 @@ python scripts/generate_issues_checklist.py issues.json issues_checklist.xlsx
 如果用户跳过 B 直接给来一份审查报告或问题清单，确认一下：
 - 如果是 markdown 报告 → 先帮他转成问题清单 Excel（走 B.4.2 流程）
 - 如果已是勾选好的 Excel → 直接进 C.2
+
+### 🔴 CHECKPOINT — 确认修复范围
+
+生成修复指令前，用 AskUserQuestion 确认：
+
+```
+问题：已读取勾选项，共 {N} 个问题待修复（{critical} 严重 / {major} 一般 / {minor} 建议）。
+  按文件分组：{file_count} 个文件受影响。
+选项：
+  - "确认，生成三种格式的修复指令"
+  - "只要 Cursor 格式"
+  - "只要 Claude Code 格式"
+  - "只要通用 Markdown 格式"
+  - "我需要调整勾选项"
+```
+
+确认后进入 C.2。
 
 ### C.2 生成三种格式的修复指令
 
@@ -582,7 +600,7 @@ AI 编码工具处理代码时，**读文件开销远大于改文件**。如果�
 
 ### C.4 交付与后续
 
-把三份输出都放到 `/mnt/user-data/outputs/<项目>/fix-prompts/` 下，用 `present_files` 展示。
+把三份输出都放到 outputs 目录下 `<项目>/fix-prompts/`，用 `present_files` 展示。
 
 **告知用户使用方式：**
 
@@ -656,10 +674,10 @@ AI 编码工具处理代码时，**读文件开销远大于改文件**。如果�
 
 ## 参考资料
 
-需要深挖时查：
-- `references/prd_review_checklist.md` — PRD 评审六维度详细说明和例子
-- `references/test_design_methods.md` — 五种用例设计方法的详细说明和例子
-- `references/code_review_checklist.md` — 四维度代码审查的详细 checklist 和坏味道样本
+需要深挖时查（**按需加载，不要一开始就全部读取**）：
+- `references/prd_review_checklist.md` — PRD 评审六维度详细说明和例子（A0 阶段需要时读取）
+- `references/test_design_methods.md` — 五种用例设计方法的详细说明和例子（A 阶段需要时读取）
+- `references/code_review_checklist.md` — 四维度代码审查的详细 checklist 和坏味道样本（B 阶段需要时读取）
 
 ## 脚本
 
