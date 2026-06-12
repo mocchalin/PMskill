@@ -1,6 +1,6 @@
 # Product Skills Bundle
 
-> 6 个 Skill 技能，覆盖从 PRD 撰写到 UI 验证的完整产品工作流。
+> 8 个 Skill 技能，覆盖从 PRD 撰写到开发完工归档的完整产品工作流。
 
 ## 包含技能
 
@@ -12,8 +12,12 @@
 | **prd-to-ui-prompt** | 从 PRD 生成 UI 提示词 — 将 PRD 转为给设计师的 UI 需求提示词 |
 | **prd-test-validator** | PRD 测试用例验证 — 根据 PRD 自动生成测试用例 |
 | **ui-alignment-checker** | UI 一致性检查 — 自动对比设计规范，检查间距、颜色、字体一致性 |
+| **prd-pipeline** | PRD 全流程 Pipeline — 7 阶段串联自动衔接，从需求到开发完工归档一条龙 |
+| **prd-reverse-writer** | PRD 反写与完工归档 — 从代码仓库提取实际实现，生成开发完工报告 |
 
 ## 完整工作流
+
+### 单技能独立使用
 
 ```
 prd-writer 写 PRD
@@ -22,6 +26,21 @@ prd-writer 写 PRD
     → prd-to-ui-prompt 转 UI 需求
     → prd-test-validator 输出测试用例
     → ui-alignment-checker 验证 UI 一致性
+    → prd-reverse-writer 开发完工归档
+```
+
+### Pipeline 一条龙模式
+
+```
+prd-pipeline
+  ├─ Stage 1: prd-writer              需求 → PRD 文档
+  ├─ Stage 2: prd-reviewer            PRD → 红字批注审核
+  ├─ Stage 3: doc-update-from-feedback 审核意见 → 修改标注版 PRD
+  ├─ Stage 4: prd-to-ui-prompt        PRD → UI 生成 Prompt
+  ├─ Stage 5: prd-test-validator      PRD → 测试用例 + 代码审查指令
+  ├─ Stage Dev: AI 辅助开发           PRD + UI Prompt → 代码
+  ├─ Stage 6: ui-alignment-checker    设计稿 vs 开发截图 → 还原度报告
+  └─ Stage 7: prd-reverse-writer      代码仓库 → 开发完工报告
 ```
 
 ## 安装方式

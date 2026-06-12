@@ -1,0 +1,6 @@
+[
+  {"id": 1, "prompt": "跑一下 PRD 流水线，我要做一个电商 App 的智能推荐功能", "expected": "进入 Step 0 收集信息，启动 Stage 1 prd-writer，依次走完用户确认的全流程阶段"},
+  {"id": 2, "prompt": "帮我走一遍完整的产品需求流程，做一个项目管理工具的看板功能", "expected": "收集信息后按 pipeline 顺序执行各 Stage，每阶段有 checkpoint 确认"},
+  {"id": 3, "prompt": "从需求到测试一条龙，需求是：SaaS 平台的权限管理系统", "expected": "询问范围后执行对应阶段（Stage 1 + Stage 5 或全流程）"},
+  {"id": 4, "prompt": "PRD pipeline，做一个在线教育平台的课程管理模块", "expected": "快速启动命令识别，进入 Step 0 收集信息，启动 pipeline"}
+]
